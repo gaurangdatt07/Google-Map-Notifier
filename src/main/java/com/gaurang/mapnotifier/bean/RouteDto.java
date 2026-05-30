@@ -13,6 +13,9 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Builder
 public class RouteDto {
-    private String id;
+    private Long id;
     private String name;
+    private Location origin;
+    private Location destination;
+    private String description;
 }

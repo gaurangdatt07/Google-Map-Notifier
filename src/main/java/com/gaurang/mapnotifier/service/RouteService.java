@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface RouteService {
 
-    List<Route> addRoutes(List<RouteDto>routeDtos);
-    Route geRouteById(String id);
+    RouteDto addRoute(RouteDto routeDto);
+    RouteDto geRouteById(Long id);
     List<Route> getRoutes();
-    List<RouteDto> deleteRoutes(List<String> ids);
+    List<Route> deleteRoutes(List<Long> ids);
 }

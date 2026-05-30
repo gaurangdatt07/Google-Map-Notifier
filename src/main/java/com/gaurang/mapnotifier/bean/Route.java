@@ -15,22 +15,19 @@ import lombok.NoArgsConstructor;
 @Table(name = "routes")
 public class Route {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "latitude", column = @Column(name = "origin_latitude")),
-        @AttributeOverride(name = "longitude", column = @Column(name = "origin_longitude"))
-    })
-    private Location origin;
+    @Column(name = "route_name")
+    private String routeName;
 
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "latitude", column = @Column(name = "destination_latitude")),
-        @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude"))
-    })
-    private Location destination;
+
+    @Column(name = "origin_id")
+    private Long originId;
+
+
+    @Column(name = "destination_id")
+    private Long destinationId;
 
     @Column(name = "interval_time")
     private double intervalTime;
@@ -53,4 +50,10 @@ public class Route {
 
     @Column(name = "created_at_epoch")
     private long createdAtEpoch;
+
+    @Column(name = "target_eta_minutes")
+    private Double targetEtaMinutes;
+
+    @Column(name = "is_deleted")
+    private byte isDeleted;
 }
