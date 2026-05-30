@@ -22,7 +22,7 @@ public class RouteCheckScheduler {
         this.routeService = routeService;
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(fixedDelay = 1000000000)
     public void checkDueRoutes() {
         log.info("Checking Due Routes");
         long now = System.currentTimeMillis();

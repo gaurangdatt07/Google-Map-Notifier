@@ -4,6 +4,7 @@ import com.gaurang.mapnotifier.bean.CheckRouteResponse;
 import com.gaurang.mapnotifier.bean.Route;
 import com.gaurang.mapnotifier.bean.RouteDto;
 import com.gaurang.mapnotifier.service.RouteService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ public class RouteApi {
     RouteService routeService;
 
     @PostMapping("/watch")
+    @Transactional
     public RouteDto route(@RequestBody final RouteDto route){
         return routeService.addRoute(route);
     }

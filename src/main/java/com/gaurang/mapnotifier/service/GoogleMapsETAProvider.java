@@ -9,6 +9,9 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 @ConditionalOnProperty(name = "eta.provider", havingValue = "google")
 public class GoogleMapsETAProvider implements EtaProvider{
@@ -35,8 +38,59 @@ public class GoogleMapsETAProvider implements EtaProvider{
         Location destination = locationRepository.findById(route.getDestinationId())
                 .orElseThrow(() -> new RuntimeException("Destination not found"));
 
-        // We'll implement actual API call in the next step.
-        throw new UnsupportedOperationException("Google Maps ETA provider not implemented yet");
+        Map<String, Object> requestBody = Map.of(
+                "origin", Map.of(
+                        "location", Map.of(
+                                "latLng", Map.of(
+                                        "latitude", origin.getLatitude(),
+                                        "longitude", origin.getLongitude()
+                                )
+                        )
+                ),
+                "destination", Map.of(
+                        "location", Map.of(
+                                "latLng", Map.of(
+                                        "latitude", destination.getLatitude(),
+                                        "longitude", destination.getLongitude()
+                                )
+                        )
+                ),
+                "travelMode", "DRIVE",
+                "routingPreference", "TRAFFIC_AWARE"
+        );
 
+
+        try{
+            Map response = restClient.post()
+                    .uri(routesUrl)
+                    .header("Content-Type", "application/json")
+                    .header("X-Goog-Api-Key", apiKey)
+                    .header("X-Goog-FieldMask", "routes.duration")
+                    .body(requestBody)
+                    .retrieve()
+                    .body(Map.class);
+            List<Map<String, Object>> routes = (List<Map<String, Object>>) response.get("routes");
+            if (routes == null || routes.isEmpty()) {
+                throw new RuntimeException("No route returned from Google Routes API");
+            }
+
+            String duration = (String) routes.get(0).get("duration");
+
+            return parseDurationToMinutes(duration);
+        }catch (Exception ex){
+         throw new RuntimeException("failed to fetch routes from google maps", ex);
+        }
+
+
+
+    }
+
+    private double parseDurationToMinutes(String duration) {
+        if (duration == null || !duration.endsWith("s")) {
+            throw new RuntimeException("Invalid duration from Google Routes API: " + duration);
+        }
+
+        double seconds = Double.parseDouble(duration.replace("s", ""));
+        return seconds / 60.0;
     }
 }
