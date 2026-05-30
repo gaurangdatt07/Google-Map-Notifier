@@ -32,6 +32,9 @@ public class RouteServiceImpl implements RouteService {
     @Autowired
     private RouteMapper routeMapper;
 
+    @Autowired
+    private EtaProvider etaProvider;
+
     @Override
     public RouteDto addRoute(RouteDto routeDto) {
         Location destination = locationRepository.save(routeDto.getDestination());
@@ -84,8 +87,7 @@ public class RouteServiceImpl implements RouteService {
             throw new RuntimeException("Route not found with id: " + id);
         }
 
-        Random random = new Random();
-        double mockEta = 10 + (120 - 10) * random.nextDouble();
+        double mockEta = etaProvider.getETAMinutes(route);
 
         route.setLastEtaMinutes(mockEta);
 
