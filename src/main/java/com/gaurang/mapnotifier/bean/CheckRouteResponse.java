@@ -8,16 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Builder
-public class RouteDto {
-    private Long id;
-    private String name;
-    private Location origin;
-    private Location destination;
-    private String description;
-    private Double targetEtaMinutes;
-    private Integer intervalTime;
+public class CheckRouteResponse {
+    private Long routeId;
+    private String routeName;
+    private String status;
+    private Double targeteETA;
+    private Long checkHappenedAt;
+    private Long nextCheckScheduledAt;
+    private Double checkEtaCalculated;
 }

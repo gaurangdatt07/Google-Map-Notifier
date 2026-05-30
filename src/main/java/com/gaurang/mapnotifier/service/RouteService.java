@@ -1,5 +1,6 @@
 package com.gaurang.mapnotifier.service;
 
+import com.gaurang.mapnotifier.bean.CheckRouteResponse;
 import com.gaurang.mapnotifier.bean.Route;
 import com.gaurang.mapnotifier.bean.RouteDto;
 
@@ -11,4 +12,5 @@ public interface RouteService {
     RouteDto geRouteById(Long id);
     List<Route> getRoutes();
     List<Route> deleteRoutes(List<Long> ids);
+    CheckRouteResponse checkEta(Long id);
 }

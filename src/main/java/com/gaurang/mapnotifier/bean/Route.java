@@ -3,6 +3,7 @@ package com.gaurang.mapnotifier.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "routes")
+@Builder
 public class Route {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

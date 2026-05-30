@@ -1,12 +1,13 @@
 package com.gaurang.mapnotifier.api;
 
+import com.gaurang.mapnotifier.bean.CheckRouteResponse;
 import com.gaurang.mapnotifier.bean.Route;
 import com.gaurang.mapnotifier.bean.RouteDto;
 import com.gaurang.mapnotifier.service.RouteService;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +29,7 @@ public class RouteApi {
     }
 
     @GetMapping("/{id}")
-    public RouteDto route(@PathParam("id") final Long id){
+    public RouteDto route(@PathVariable("id") final Long id){
         return routeService.geRouteById(id);
     }
 
@@ -38,8 +39,13 @@ public class RouteApi {
     }
 
     @DeleteMapping("/delete/{id}")
-    public List<Route> deleteRoute(@PathParam("id")Long routeId){
+    public List<Route> deleteRoute(@PathVariable("id")Long routeId){
         return routeService.deleteRoutes(Collections.singletonList(routeId));
+    }
+
+    @PostMapping("/check/{id}")
+    public CheckRouteResponse checkRoute(@PathVariable("id") Long routeId) {
+        return routeService.checkEta(routeId);
     }
 
 }

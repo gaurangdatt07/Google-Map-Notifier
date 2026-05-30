@@ -14,33 +14,22 @@ public class RouteMapper {
     @Autowired
     private LocationRepository locationRepository;
 
-    /**
-     * Converts RouteDto to Route entity
-     * Persists Location objects first and maps only their IDs to Route
-     * @param dto the RouteDto to convert
-     * @return Route entity with Location references
-     */
     public Route toEntity(RouteDto dto,Long originId,Long destinationId) {
         if (dto == null) {
             return null;
         }
-
-        Route route = new Route();
-        route.setRouteName(dto.getName());
-        route.setOriginId(dto.getOrigin().getId());
-        route.setDestinationId(dto.getDestination().getId());
-        route.setStatus(Status.ACTIVE);
-        route.setCreatedAtEpoch(System.currentTimeMillis());
-        route.setIsDeleted((byte) 0);
-
-        return route;
+        return Route.builder()
+                .routeName(dto.getName())
+                .originId(originId)
+                .destinationId(destinationId)
+                .status(Status.ACTIVE)
+                .targetEtaMinutes(dto.getTargetEtaMinutes())
+                .intervalTime(dto.getIntervalTime())
+                .createdAtEpoch(System.currentTimeMillis())
+                .isDeleted((byte) 0).build();
     }
 
-    /**
-     * Converts Route entity to RouteDto
-     * @param route the Route entity to convert
-     * @return RouteDto
-     */
+
     public RouteDto toDto(Route route,Location destination,Location origin) {
         if (route == null) {
             return null;
@@ -49,8 +38,8 @@ public class RouteMapper {
         return RouteDto.builder()
                 .id(route.getId())
                 .name(route.getRouteName())
-                .origin(origin)      // Returns full Location object
-                .destination(destination) // Returns full Location object
+                .origin(origin)
+                .destination(destination)
                 .build();
     }
 }
